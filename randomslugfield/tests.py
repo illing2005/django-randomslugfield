@@ -34,6 +34,10 @@ class MaxSlugs(models.Model):
     slug = RandomSlugField(length=1, exclude_lower=True, exclude_upper=True)
 
 
+class InheritedSlug(MaxSlugs):
+    pass
+
+
 class RandomSlugTestCase(TestCase):
 
     def test_slug_length(self):
@@ -115,6 +119,13 @@ class RandomSlugTestCase(TestCase):
     def test_max_length_defaults_to_length(self):
         field = RandomSlugField(length=10)
         self.assertEqual(field.max_length, 10)
+
+    def test_inherited_slug(self):
+        for i in range(5):
+            MaxSlugs.objects.create()
+        for i in range(5):
+            InheritedSlug.objects.create()
+        self.assertEqual(MaxSlugs.objects.count(), 10)
 
     @skipIf(django.VERSION[:2] <= (1, 6),
             "Migrations are handled by south in Django < 1.7")

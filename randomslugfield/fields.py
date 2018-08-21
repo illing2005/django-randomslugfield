@@ -70,7 +70,8 @@ class RandomSlugField(SlugField):
 
     def generate_slug(self, model_instance):
         """Returns a unique slug."""
-        queryset = model_instance.__class__._default_manager.all()
+        # queryset = model_instance.__class__._default_manager.all()
+        queryset = self.model.objects.all()
 
         # Only count slugs that match current length to prevent issues
         # when pre-existing slugs are a different length.
